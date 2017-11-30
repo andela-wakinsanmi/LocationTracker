@@ -10,13 +10,16 @@ import com.google.android.gms.awareness.fence.LocationFence;
 
 public class GeoFenceCreator {
 
-    private double mLocationLatitude;
-    private double mLocationLongitude;
+    private double mLocationLatitude = 0;
+    private double mLocationLongitude = 0;
     private double mRadius = 100;
 
-    public GeoFenceCreator(double locationLat, double locationLong) {
-        mLocationLatitude = locationLat;
-        mLocationLongitude = locationLong;
+    public void setLocationLatitude(double latitude) {
+        mLocationLatitude = latitude;
+    }
+
+    public void setLocationLongitude(double longitude) {
+        mLocationLongitude = longitude;
     }
 
     public void setRadius(double radius) {
