@@ -12,12 +12,12 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.ResultCallbacks;
 import com.google.android.gms.common.api.Status;
 
-public class GeofenceRegister {
+public class GeoFenceRegister {
     private static final String TAG = "com.spykins.GeofenceReg";
     private GoogleApiClient mGoogleApiClient;
     private PendingIntent mPendingIntent;
 
-    public GeofenceRegister(GoogleApiClient googleApiClient) {
+    public GeoFenceRegister(GoogleApiClient googleApiClient) {
         mGoogleApiClient = googleApiClient;
     }
 

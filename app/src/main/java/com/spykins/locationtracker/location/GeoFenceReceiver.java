@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import com.google.android.gms.awareness.fence.FenceState;
 import com.spykins.locationtracker.AppConstants;
 
-public class GeofenceReceiver extends BroadcastReceiver {
+public class GeoFenceReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
