@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 
 import com.google.android.gms.awareness.fence.AwarenessFence;
+import com.google.android.gms.awareness.fence.DetectedActivityFence;
 import com.google.android.gms.awareness.fence.LocationFence;
 
 public class GeoFenceCreator {
@@ -27,9 +28,13 @@ public class GeoFenceCreator {
     }
 
     public AwarenessFence createEnteringAwareness(Context context) {
+
+
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-            return LocationFence.entering(mLocationLatitude, mLocationLongitude, mRadius);
+            //return LocationFence.entering(mLocationLatitude, mLocationLongitude, mRadius);
+            return LocationFence.in(mLocationLatitude, mLocationLongitude, mRadius, 0L);
+
         }
         return null;
     }

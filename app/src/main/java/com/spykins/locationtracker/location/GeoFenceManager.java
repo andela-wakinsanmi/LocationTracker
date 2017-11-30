@@ -12,6 +12,22 @@ public class GeoFenceManager {
         mGeoFenceCreator = geoFenceCreator;
     }
 
+    public void setLatitude(double latitude) {
+        mGeoFenceCreator.setLocationLatitude(latitude);
+    }
+
+    public void setLongitude(double longitude) {
+        mGeoFenceCreator.setLocationLongitude(longitude);
+    }
+
+    public GeoFenceRegister getGeoFenceRegister() {
+        return mGeoFenceRegister;
+    }
+
+    public GeoFenceCreator getGeoFenceCreator() {
+        return mGeoFenceCreator;
+    }
+
     public void registerFence(String firstKey, AwarenessFence firstFence, String secondKey, AwarenessFence secondFence) {
         mGeoFenceRegister.registerFence(firstKey, firstFence, secondKey, secondFence);
     }

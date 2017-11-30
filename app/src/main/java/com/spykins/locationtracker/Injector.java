@@ -10,11 +10,20 @@ import com.spykins.locationtracker.location.GeoFenceRegister;
 
 public class Injector {
     private static Context sContext;
+    private static GoogleApiClient sGoogleApiClient;
 
-    public static GoogleApiClient provideGoogleApiClient() {
-        return new GoogleApiClient.Builder(provideContext())
-                .addApi(Awareness.API)
-                .build();
+    public static void setApplicationContext(Context context) {
+        sContext = context;
+    }
+
+    public static GoogleApiClient provideGoogleApiClient(GoogleApiClient.ConnectionCallbacks connectionCallbacks) {
+        if (sGoogleApiClient == null) {
+            sGoogleApiClient = new GoogleApiClient.Builder(provideContext())
+                    .addApi(Awareness.API)
+                    .addConnectionCallbacks(connectionCallbacks)
+                    .build();
+        }
+        return sGoogleApiClient;
     }
 
     private static Context provideContext() {
@@ -38,6 +47,9 @@ public class Injector {
     }
 
     private static GeoFenceRegister provideGeoRegister() {
-        return new GeoFenceRegister(provideGoogleApiClient());
+        if (sGoogleApiClient == null) {
+            throw new RuntimeException("You need to call provideGoogleApiClient before this");
+        }
+        return new GeoFenceRegister(sGoogleApiClient);
     }
 }

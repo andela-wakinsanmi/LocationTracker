@@ -21,13 +21,18 @@ public class GeoFenceRegister {
         mGoogleApiClient = googleApiClient;
     }
 
+    public void setPendingIntent(PendingIntent pendingIntent) {
+        mPendingIntent = pendingIntent;
+    }
+
     protected void registerFence(final String fenceKey, final AwarenessFence fence,
             String fenceKey2, AwarenessFence fence2) {
+
         Awareness.FenceApi.updateFences(
                 mGoogleApiClient,
                 new FenceUpdateRequest.Builder()
                         .addFence(fenceKey, fence, mPendingIntent)
-                        .addFence(fenceKey2, fence2, mPendingIntent)
+                        //.addFence(fenceKey2, fence2, mPendingIntent)
                         .build())
                 .setResultCallback(new ResultCallback<Status>() {
                     @Override
