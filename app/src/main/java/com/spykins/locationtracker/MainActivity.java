@@ -6,6 +6,8 @@ import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.spykins.locationtracker.location.GeofenceReceiver;
+
 public class MainActivity extends AppCompatActivity {
 
     private PendingIntent mPendingIntent;

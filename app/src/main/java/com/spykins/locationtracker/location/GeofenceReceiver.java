@@ -1,4 +1,4 @@
-package com.spykins.locationtracker;
+package com.spykins.locationtracker.location;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.google.android.gms.awareness.fence.FenceState;
+import com.spykins.locationtracker.AppConstants;
 
 public class GeofenceReceiver extends BroadcastReceiver {
 
