@@ -21,9 +21,6 @@ public class GeoFenceRegister {
         mGoogleApiClient = googleApiClient;
     }
 
-    public void setGeoQueryFenceCallback() {}
-
-
     protected void registerFence(final String fenceKey, final AwarenessFence fence,
             String fenceKey2, AwarenessFence fence2) {
         Awareness.FenceApi.updateFences(
