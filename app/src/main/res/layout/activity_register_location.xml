@@ -79,23 +79,17 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_gravity="center_horizontal"
-            android:orientation="horizontal">
+            android:id="@+id/textViewLocationError"
+            android:visibility="gone"
+            android:textColor="@color/colorAccent"
+            android:onClick="errorTexViewClicked"
+            android:text="@string/the_cordinate_is_empty_click_to_fetch" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textViewLocationError"
-                android:visibility="gone"
-                android:textColor="@color/colorAccent"
-                android:onClick="errorTexViewClicked"
-                android:text="@string/the_cordinate_is_empty_click_to_fetch" />
-
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -106,7 +100,6 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="@string/register_location_button"
                 android:onClick="registerButtonClicked"
                 android:id="@+id/submitValue"/>

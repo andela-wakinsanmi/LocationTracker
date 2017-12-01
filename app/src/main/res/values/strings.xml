@@ -14,4 +14,6 @@
     <string name="address_is_empty">Enter the Address, it is empty</string>
     <string name="location_is_empty">location field is empty or not a number, click here to generate location
     </string>
+    <string name="error_unknown">Error with the input, try again</string>
+    <string name="error_location">Error fetching location, turn on Location and tap again</string>
 </resources>

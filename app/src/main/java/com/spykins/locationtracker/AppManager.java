@@ -1,7 +1,6 @@
 package com.spykins.locationtracker;
 
 import android.app.PendingIntent;
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.location.Location;
@@ -62,7 +61,7 @@ public class AppManager implements AppManagerCallback {
 
     @Override
     public void setTimeDuration(long timeEntered, long timeLeft) {
-        mGeoData.settimeSpent(timeLeft - timeEntered);
+        mGeoData.setTimeSpent(timeLeft - timeEntered);
         mDbManager.getGeoDatabase().geoDataDao().insertDataInDb(mGeoData);
     }
 

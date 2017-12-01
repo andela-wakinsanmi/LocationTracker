@@ -58,7 +58,7 @@ public class GeoData {
         return mAddress;
     }
 
-    public void settimeSpent(long timeStamp) {
+    public void setTimeSpent(long timeStamp) {
         this.timeSpent = timeStamp;
     }
 

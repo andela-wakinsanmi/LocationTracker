@@ -1,38 +1,34 @@
 package com.spykins.locationtracker.ui.registrationView;
 
 import android.app.PendingIntent;
-import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.spykins.locationtracker.AppConstants;
 import com.spykins.locationtracker.AppManager;
 import com.spykins.locationtracker.Injector;
 import com.spykins.locationtracker.R;
 import com.spykins.locationtracker.Util;
 import com.spykins.locationtracker.location.GeoFenceReceiver;
-import com.spykins.locationtracker.model.GeoData;
 
-import java.util.Calendar;
-
-public class RegisterLocationActivity extends AppCompatActivity {
+public class RegisterLocationActivity extends AppCompatActivity implements
+        RegistrationContract.View {
 
     private EditText mAddressText;
     private EditText mLongitudeText;
     private EditText mLatitudeText;
     private TextView mErrorTextView;
     private AppManager appManager;
+    private RegistrationContract.ViewModel mViewModel;
+    private PendingIntent mPendingIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,73 +43,84 @@ public class RegisterLocationActivity extends AppCompatActivity {
         mLatitudeText = findViewById(R.id.latitudeEditText);
         mLongitudeText = findViewById(R.id.longitudeEditText);
         mErrorTextView = findViewById(R.id.textViewLocationError);
+
+        mViewModel = (RegistrationContract.ViewModel)ViewModelProviders.of(this).get(RegisterLocationViewModel.class);
+        mViewModel.setView(this, new Util());
+
     }
 
     public void registerButtonClicked(View view) {
 
-        if (TextUtils.isEmpty(mAddressText.getText().toString().trim())) {
-            mErrorTextView.setVisibility(View.VISIBLE);
-            mErrorTextView.setText(getResources().getString(R.string.address_is_empty));
-            return;
-        }
-
-        String longitudeText = mLongitudeText.getText().toString().trim();
+       String addressText = mAddressText.getText().toString().trim();
+       String longitudeText = mLongitudeText.getText().toString().trim();
         String latitudeText = mLatitudeText.getText().toString().trim();
-        boolean isValidDouble = Util.isValidDouble(longitudeText) && Util.isValidDouble(latitudeText);
 
-        if (!isValidDouble) {
-            mErrorTextView.setVisibility(View.VISIBLE);
-            mErrorTextView.setText(getResources().getString(R.string.location_is_empty));
-            return;
-        }
-
-        registerGoogleApiClient(true);
+       if (mViewModel.shouldProceedWithRegisteration(addressText, longitudeText, latitudeText)) {
+           mViewModel.registerGoogleApiClient(true);
+       }
     }
 
-    private void registerGoogleApiClient(final boolean shouldSetUpGeoFencing) {
-
-        GoogleApiClient googleApiClient = Injector.provideGoogleApiClient(new GoogleApiClient.ConnectionCallbacks() {
-            @Override
-            public void onConnected(@Nullable Bundle bundle) {
-               setUpGeoFencingInNeccessary(shouldSetUpGeoFencing);
-            }
-
-            @Override
-            public void onConnectionSuspended(int i) {}
-        });
-
-        if (googleApiClient.isConnected()) {
-            setUpGeoFencingInNeccessary(shouldSetUpGeoFencing);
-        } else {
-            googleApiClient.connect();
-        }
+    @Override
+    public void setErrorTextViewForAddressText() {
+        mErrorTextView.setVisibility(View.VISIBLE);
+        mErrorTextView.setText(getResources().getString(R.string.address_is_empty));
     }
 
-    private void setUpGeoFencingInNeccessary(boolean shouldSetUpGeoFencing) {
-        Log.d("wale", "log onConnected");
-        appManager = Injector.provideAppManager();
-        if (shouldSetUpGeoFencing) {
-            setUpGeoFencing();
-        } else {
-            fetchCurrentLocation();
-        }
+    @Override
+    public void setErrorTextViewForLocation() {
+        mErrorTextView.setVisibility(View.VISIBLE);
+        mErrorTextView.setText(getResources().getString(R.string.location_is_empty));
     }
 
-    private void fetchCurrentLocation() {
-        appManager.fetchCurrentUserLocation(this).observe(this, new Observer<Location>() {
-            @Override
-            public void onChanged(@Nullable Location location) {
-                if (location == null) {
-                    mErrorTextView.setText("Error fetching location, turn on Location and tap again");
-                } else {
-                    mLatitudeText.setText(String.valueOf(location.getLatitude()));
-                    mLongitudeText.setText(String.valueOf(location.getLongitude()));
-                    mErrorTextView.setVisibility(View.GONE);
-                }
-            }
-        });
+    @Override
+    public void registerGeoFenceReceiver(GeoFenceReceiver geoFenceReceiver) {
+        Intent intent = new Intent(AppConstants.FENCE_RECEIVER_ACTION);
+        mPendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        registerReceiver(geoFenceReceiver, new IntentFilter(AppConstants.FENCE_RECEIVER_ACTION));
     }
 
+    @Override
+    public void setErrorUnKnown() {
+        mErrorTextView.setText(R.string.error_unknown);
+        mErrorTextView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void setErrorInLocation() {
+        mErrorTextView.setText(R.string.error_location);
+    }
+
+    @Override
+    public void setLocationValueOnView(Location location) {
+        mLatitudeText.setText(String.valueOf(location.getLatitude()));
+        mLongitudeText.setText(String.valueOf(location.getLongitude()));
+        mErrorTextView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public String fetchLongitudeValue() {
+        return mLongitudeText.getText().toString().trim();
+    }
+
+    @Override
+    public String fetchLatitudeValue() {
+        return mLatitudeText.getText().toString().trim();
+    }
+
+    @Override
+    public String fetchAddressValue() {
+        return mAddressText.getText().toString().trim();
+    }
+
+    @Override
+    public PendingIntent getPendingIntent() {
+        return mPendingIntent;
+    }
+
+    @Override
+    public void finishActivity() {
+        finish();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -123,31 +130,9 @@ public class RegisterLocationActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setUpGeoFencing() {
-        Intent intent = new Intent(AppConstants.FENCE_RECEIVER_ACTION);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-        GeoFenceReceiver geoFenceReceiver = new GeoFenceReceiver();
-        registerReceiver(geoFenceReceiver, new IntentFilter(AppConstants.FENCE_RECEIVER_ACTION));
-
-        Calendar calendar = Calendar.getInstance();
-        String longitude = mLongitudeText.getText().toString().trim();
-        String latitude = mLatitudeText.getText().toString().trim();
-        String address = mAddressText.getText().toString().trim();
-        GeoData geoData;
-        if (Util.isValidDouble(latitude) && Util.isValidDouble(longitude) && !address.isEmpty() ) {
-            geoData = new GeoData(calendar.getTime(), Double.valueOf(latitude),
-                    Double.valueOf(longitude), "Andela Office");
-        } else {
-            mErrorTextView.setText("Error with the input, try again");
-            mErrorTextView.setVisibility(View.VISIBLE);
-            return;
-        }
-
-        appManager.init(geoData, pendingIntent, this);
-        finish();
-    }
-
     public void errorTexViewClicked(View view) {
-        registerGoogleApiClient(false);
+        mViewModel.registerGoogleApiClient(false);
     }
+
+
 }

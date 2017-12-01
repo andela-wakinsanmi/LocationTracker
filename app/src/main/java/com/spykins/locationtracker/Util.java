@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 public class Util {
 
-    public static boolean isValidDouble(String num) {
+    public boolean isValidDouble(String num) {
         final String Digits     = "(\\p{Digit}+)";
         final String HexDigits  = "(\\p{XDigit}+)";
 // an exponent is 'e' or 'E' followed by an optionally
