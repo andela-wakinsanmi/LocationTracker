@@ -6,6 +6,7 @@ import android.content.IntentFilter;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.google.android.gms.awareness.fence.AwarenessFence;
@@ -17,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
 
     private PendingIntent mPendingIntent;
     private GeoFenceReceiver mGeoFenceReceiver;
+    private RecyclerView mRecyclerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
