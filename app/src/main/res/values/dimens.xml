@@ -4,4 +4,7 @@
     <dimen name="form_label_left_margin">10dp</dimen>
     <dimen name="form_label_right_margin">10dp</dimen>
     <dimen name="form_label_margin_top">20dp</dimen>
+    <dimen name="recycler_item_left_margin">10dp</dimen>
+    <dimen name="recycler_item_top_margin">5dp</dimen>
+    <dimen name="recycler_item_right_margin">5dp</dimen>
 </resources>

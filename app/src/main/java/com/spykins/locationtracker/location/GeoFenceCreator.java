@@ -39,7 +39,7 @@ public class GeoFenceCreator {
                 == PackageManager.PERMISSION_GRANTED) {
             return LocationFence.in(mLocationLatitude, mLocationLongitude, mRadius, 0L);
         } else {
-            //
+            //request for permission from user
         }
         return null;
     }

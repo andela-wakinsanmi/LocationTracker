@@ -17,6 +17,8 @@ public class GeoData {
     private double mLongitude;
     private String mAddress;
     private double timeSpent;
+    private long mEnteredTime;
+    private long mExitTime;
 
     @Ignore
     public GeoData(Date date, double latitude, double longitude, String address) {
@@ -26,12 +28,16 @@ public class GeoData {
         address = address;
     }
 
-    public GeoData(int id, Date date, double latitude, double longitude, String address, double timeSpent) {
-        this.mDate = date;
-        this.mLatitude = latitude;
-        this.mLongitude = longitude;
-        address = address;
+    public GeoData(int id, Date date, double latitude, double longitude, String address,
+            double timeSpent, long enteredTime, long exitTime) {
+        this.id = id;
+        mDate = date;
+        mLatitude = latitude;
+        mLongitude = longitude;
+        mAddress = address;
         this.timeSpent = timeSpent;
+        mEnteredTime = enteredTime;
+        mExitTime = exitTime;
     }
 
     public double getTimeSpent() {
@@ -58,6 +64,14 @@ public class GeoData {
         return mAddress;
     }
 
+    public long getEnteredTime() {
+        return mEnteredTime;
+    }
+
+    public long getExitTime() {
+        return mExitTime;
+    }
+
     public void setTimeSpent(long timeStamp) {
         this.timeSpent = timeStamp;
     }
@@ -68,5 +82,13 @@ public class GeoData {
 
     public void setLongitude(double longitude) {
         mLongitude = longitude;
+    }
+
+    public void setEnteredTime(long enteredTime) {
+        mEnteredTime = enteredTime;
+    }
+
+    public void setExitTime(long exitTime) {
+        mExitTime = exitTime;
     }
 }
