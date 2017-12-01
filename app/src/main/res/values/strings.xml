@@ -17,4 +17,5 @@
     <string name="error_unknown">Error with the input, try again</string>
     <string name="error_location">Error fetching location, turn on Location and tap again</string>
     <string name="time_spent">Time Spent :</string>
+    <string name="list_is_empty">List is empty</string>
 </resources>
