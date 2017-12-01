@@ -26,9 +26,8 @@ public class MainActivity extends AppCompatActivity {
     private GeoFenceReceiver mGeoFenceReceiver;
     private RecyclerView mRecyclerView;
     private GeoRecyclerViewAdapter mGeoRecyclerViewAdapter;
-    private double mLatitude = 6.553961;
-    private double mLongitude = 3.366649;
-
+    private double mLatitude = 6.5540;
+    private double mLongitude = 3.3668;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

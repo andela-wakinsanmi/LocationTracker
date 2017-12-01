@@ -1,16 +1,22 @@
 package com.spykins.locationtracker.location;
 
+import android.Manifest;
 import android.app.PendingIntent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.google.android.gms.awareness.Awareness;
 import com.google.android.gms.awareness.fence.AwarenessFence;
 import com.google.android.gms.awareness.fence.FenceUpdateRequest;
+import com.google.android.gms.awareness.snapshot.LocationResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.ResultCallbacks;
 import com.google.android.gms.common.api.Status;
+import com.spykins.locationtracker.Injector;
 
 public class GeoFenceRegister {
     private static final String TAG = "com.spykins.GeofenceReg";
@@ -44,6 +50,10 @@ public class GeoFenceRegister {
                         }
                     }
                 });
+    }
+
+    public GoogleApiClient getGoogleApiClient() {
+        return mGoogleApiClient;
     }
 
     protected void unregisterFence(final String fenceKey) {

@@ -61,4 +61,12 @@ public class GeoData {
     public void settimeSpent(long timeStamp) {
         this.timeSpent = timeStamp;
     }
+
+    public void setLatitude(double latitude) {
+        mLatitude = latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        mLongitude = longitude;
+    }
 }
