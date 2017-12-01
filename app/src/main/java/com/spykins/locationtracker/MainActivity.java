@@ -14,7 +14,11 @@ import com.google.android.gms.awareness.fence.AwarenessFence;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.spykins.locationtracker.location.GeoFenceManager;
 import com.spykins.locationtracker.location.GeoFenceReceiver;
+import com.spykins.locationtracker.model.GeoData;
 import com.spykins.locationtracker.ui.GeoRecyclerViewAdapter;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     private GeoFenceReceiver mGeoFenceReceiver;
     private RecyclerView mRecyclerView;
     private GeoRecyclerViewAdapter mGeoRecyclerViewAdapter;
+    private double mLatitude = 6.553961;
+    private double mLongitude = 3.366649;
 
 
     @Override
@@ -58,12 +64,11 @@ public class MainActivity extends AppCompatActivity {
         mGeoFenceReceiver = new GeoFenceReceiver();
         registerReceiver(mGeoFenceReceiver, new IntentFilter(AppConstants.FENCE_RECEIVER_ACTION));
 
-        GeoFenceManager geoFenceManager = Injector.provideGeoManager();
-        geoFenceManager.setLatitude(6.553961);
-        geoFenceManager.setLongitude(3.366649);
-        geoFenceManager.getGeoFenceRegister().setPendingIntent(mPendingIntent);
-        AwarenessFence enteringAwarenss = geoFenceManager.getGeoFenceCreator().createEnteringAwareness(this);
-        AwarenessFence exitAwareness = geoFenceManager.getGeoFenceCreator().createExitingAwareness(this);
-        geoFenceManager.registerFence(AppConstants.ENTERED_FENCE,enteringAwarenss, AppConstants.EXIT_FENCE, exitAwareness);
+        AppManager appManager = Injector.provideAppManager();
+        Calendar calendar = Calendar.getInstance();
+        GeoData geoData = new GeoData(calendar.getTime(), mLatitude, mLongitude, "Andela Office");
+        appManager.init(geoData, mPendingIntent, this);
+
+
     }
 }

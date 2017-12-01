@@ -7,39 +7,37 @@ import android.text.TextUtils;
 
 import com.google.android.gms.awareness.fence.FenceState;
 import com.spykins.locationtracker.AppConstants;
+import com.spykins.locationtracker.AppManager;
+import com.spykins.locationtracker.Injector;
+import com.spykins.locationtracker.db.AppSharedPreference;
 
 public class GeoFenceReceiver extends BroadcastReceiver {
+    private AppManager mAppManager;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         FenceState fenceState = FenceState.extract(intent);
-        String fenceKey = fenceState.getFenceKey();
-
-        if (fenceKey.equals(AppConstants.ENTERED_FENCE)) {
-            processOnReceive(context, intent, fenceState, fenceKey, true);
-
-
-        } else if (fenceKey.equals(AppConstants.EXIT_FENCE)) {
-
-        }
-
+        mAppManager = Injector.provideAppManager();
+        processEnterFence(context, intent, fenceState);
     }
 
-    private void processOnReceive(Context context, Intent intent, FenceState fenceState, String fenceKey,
-            boolean hasEntered) {
+    private void processEnterFence(Context context, Intent intent, FenceState fenceState) {
+        String fenceKey = fenceState.getFenceKey();
 
-        if (TextUtils.equals(fenceState.getFenceKey(), AppConstants.ENTERED_FENCE)) {
+        if (TextUtils.equals(fenceKey, AppConstants.ENTERED_FENCE)) {
             switch(fenceState.getCurrentState()) {
                 case FenceState.TRUE:
-                    //Log.i(TAG, "Headphones are plugged in.");
+                    mAppManager.writeEnterGeoFenceTimeStamp();
                     break;
                 case FenceState.FALSE:
-                    //Log.i(TAG, "Headphones are NOT plugged in.");
                     break;
                 case FenceState.UNKNOWN:
                     //Log.i(TAG, "The headphone fence is in an unknown state.");
                     break;
             }
+        } else if (TextUtils.equals(fenceKey, AppConstants.EXIT_FENCE)) {
+            mAppManager.computeExitFence();
+
         }
     }
 }
