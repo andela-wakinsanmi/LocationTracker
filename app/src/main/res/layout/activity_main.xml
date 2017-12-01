@@ -17,6 +17,7 @@
             android:id="@+id/registerLocation"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/button_margin"
+            android:onClick="goToRegistrationScreen"
             android:text="@string/register_location"/>
 
         <Button
@@ -24,15 +25,10 @@
             android:id="@+id/vieLocation"
             android:layout_marginTop="@dimen/button_margin"
             android:layout_height="wrap_content"
+            android:onClick="goToListView"
             android:text="@string/view_saved_location"/>
 
 
     </LinearLayout>
-
-
-    <!--<android.support.v7.widget.RecyclerView
-        android:id="@+id/recycleview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />-->
 
 </RelativeLayout>

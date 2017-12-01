@@ -3,6 +3,7 @@
           package="com.spykins.locationtracker">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,6 +22,11 @@
         <meta-data
             android:name="com.google.android.awareness.API_KEY"
             android:value="AIzaSyCgAoQyDoil0Y5GppcXOZpIUsIQxMr0bXM"/>
+
+        <activity android:name=".RegisterLocationActivity">
+        </activity>
+        <activity android:name=".ViewGeoListActivity">
+        </activity>
     </application>
 
 </manifest>
