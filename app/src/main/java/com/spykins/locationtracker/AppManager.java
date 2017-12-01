@@ -1,7 +1,9 @@
 package com.spykins.locationtracker;
 
 import android.app.PendingIntent;
+import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
+import android.location.Location;
 
 import com.google.android.gms.awareness.fence.AwarenessFence;
 import com.spykins.locationtracker.db.AppSharedPreference;
@@ -16,31 +18,34 @@ public class AppManager implements AppManagerCallback {
     private GeoData mGeoData;
     private PendingIntent mPendingIntent;
     private Context mContext;
+    private MutableLiveData<Location> mLocationMutableLiveData;
 
     public AppManager(GeoFenceManager geoFenceManager, DbManager dbManager, AppSharedPreference appSharedPreference) {
         mGeoFenceManager = geoFenceManager;
         mDbManager = dbManager;
         mAppSharedPreference = appSharedPreference;
+        mLocationMutableLiveData = new MutableLiveData<>();
         mAppSharedPreference.setAppManagerCallBack(this);
     }
 
-    public void init(GeoData geoData, PendingIntent pendingIntent, Context context, boolean isCoordinateGiven) {
+    public void init(GeoData geoData, PendingIntent pendingIntent, Context context) {
         mPendingIntent = pendingIntent;
         mContext = context;
-        if (isCoordinateGiven) {
-            mGeoData = geoData;
-            mGeoFenceManager.setLatitude(geoData.getLatitude());
-            mGeoFenceManager.setLongitude(geoData.getLongitude());
-            mGeoFenceManager.getGeoFenceRegister().setPendingIntent(pendingIntent);
+        mGeoData = geoData;
+        mGeoFenceManager.setLatitude(geoData.getLatitude());
+        mGeoFenceManager.setLongitude(geoData.getLongitude());
+        mGeoFenceManager.getGeoFenceRegister().setPendingIntent(pendingIntent);
 
-            AwarenessFence enteringAwarenss = mGeoFenceManager.getGeoFenceCreator().createEnteringAwareness(context);
-            AwarenessFence exitAwareness = mGeoFenceManager.getGeoFenceCreator().createExitingAwareness(context);
-            mGeoFenceManager.registerFence(AppConstants.ENTERED_FENCE, enteringAwarenss, AppConstants.EXIT_FENCE, exitAwareness);
+        AwarenessFence enteringAwarenss = mGeoFenceManager.getGeoFenceCreator().createEnteringAwareness(context);
+        AwarenessFence exitAwareness = mGeoFenceManager.getGeoFenceCreator().createExitingAwareness(context);
+        mGeoFenceManager.registerFence(AppConstants.ENTERED_FENCE, enteringAwarenss, AppConstants.EXIT_FENCE, exitAwareness);
 
-        } else {
-            mGeoFenceManager.getGeoFenceCreator().getLocation(context,
-                    mGeoFenceManager.getGeoFenceRegister().getGoogleApiClient(), geoData, this);
-        }
+    }
+
+    public MutableLiveData<Location> fetchCurrentUserLocation(Context context) {
+        mGeoFenceManager.getGeoFenceCreator().getLocation(context,
+                mGeoFenceManager.getGeoFenceRegister().getGoogleApiClient(), this);
+        return mLocationMutableLiveData;
     }
 
     public void initWithoutLongAndLat() {
@@ -56,12 +61,12 @@ public class AppManager implements AppManagerCallback {
 
     @Override
     public void setTimeDuration(long timeEntered, long timeLeft) {
-        mGeoData.settimeSpent(timeLeft - timeEntered);
+        mGeoData.setTimeSpent(timeLeft - timeEntered);
         mDbManager.getGeoDatabase().geoDataDao().insertDataInDb(mGeoData);
     }
 
     @Override
-    public void setGeoDataLatitudeAndLongitude(GeoData data) {
-        init(data, mPendingIntent, mContext, true);
+    public void setLocation(Location location) {
+        mLocationMutableLiveData.setValue(location);
     }
 }

@@ -1,6 +1,7 @@
 package com.spykins.locationtracker;
 
 import android.app.PendingIntent;
+import android.location.Location;
 
 import com.spykins.locationtracker.model.GeoData;
 
@@ -11,5 +12,5 @@ import com.spykins.locationtracker.model.GeoData;
 public interface AppManagerCallback {
     void setTimeDuration(long timeEntered, long timeLeft);
 
-    void setGeoDataLatitudeAndLongitude(GeoData data);
+    void setLocation(Location location);
 }
