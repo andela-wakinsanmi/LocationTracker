@@ -23,7 +23,7 @@
             android:name="com.google.android.awareness.API_KEY"
             android:value="AIzaSyCgAoQyDoil0Y5GppcXOZpIUsIQxMr0bXM"/>
 
-        <activity android:name=".RegisterLocationActivity">
+        <activity android:name=".ui.registrationView.RegisterLocationActivity">
         </activity>
         <activity android:name=".ViewGeoListActivity">
         </activity>

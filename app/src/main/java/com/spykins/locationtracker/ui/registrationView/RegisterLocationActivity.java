@@ -1,4 +1,4 @@
-package com.spykins.locationtracker;
+package com.spykins.locationtracker.ui.registrationView;
 
 import android.app.PendingIntent;
 import android.arch.lifecycle.Observer;
@@ -16,6 +16,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.spykins.locationtracker.AppConstants;
+import com.spykins.locationtracker.AppManager;
+import com.spykins.locationtracker.Injector;
+import com.spykins.locationtracker.R;
+import com.spykins.locationtracker.Util;
 import com.spykins.locationtracker.location.GeoFenceReceiver;
 import com.spykins.locationtracker.model.GeoData;
 
@@ -23,10 +28,6 @@ import java.util.Calendar;
 
 public class RegisterLocationActivity extends AppCompatActivity {
 
-    private PendingIntent mPendingIntent;
-    private GeoFenceReceiver mGeoFenceReceiver;
-    private double mLatitude = 6.5540;
-    private double mLongitude = 3.3668;
     private EditText mAddressText;
     private EditText mLongitudeText;
     private EditText mLatitudeText;
@@ -67,7 +68,6 @@ public class RegisterLocationActivity extends AppCompatActivity {
         }
 
         registerGoogleApiClient(true);
-        finish();
     }
 
     private void registerGoogleApiClient(final boolean shouldSetUpGeoFencing) {
@@ -125,13 +125,26 @@ public class RegisterLocationActivity extends AppCompatActivity {
 
     private void setUpGeoFencing() {
         Intent intent = new Intent(AppConstants.FENCE_RECEIVER_ACTION);
-        mPendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-        mGeoFenceReceiver = new GeoFenceReceiver();
-        registerReceiver(mGeoFenceReceiver, new IntentFilter(AppConstants.FENCE_RECEIVER_ACTION));
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        GeoFenceReceiver geoFenceReceiver = new GeoFenceReceiver();
+        registerReceiver(geoFenceReceiver, new IntentFilter(AppConstants.FENCE_RECEIVER_ACTION));
 
         Calendar calendar = Calendar.getInstance();
-        GeoData geoData = new GeoData(calendar.getTime(), mLatitude, mLongitude, "Andela Office");
-        appManager.init(geoData, mPendingIntent, this);
+        String longitude = mLongitudeText.getText().toString().trim();
+        String latitude = mLatitudeText.getText().toString().trim();
+        String address = mAddressText.getText().toString().trim();
+        GeoData geoData;
+        if (Util.isValidDouble(latitude) && Util.isValidDouble(longitude) && !address.isEmpty() ) {
+            geoData = new GeoData(calendar.getTime(), Double.valueOf(latitude),
+                    Double.valueOf(longitude), "Andela Office");
+        } else {
+            mErrorTextView.setText("Error with the input, try again");
+            mErrorTextView.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        appManager.init(geoData, pendingIntent, this);
+        finish();
     }
 
     public void errorTexViewClicked(View view) {
