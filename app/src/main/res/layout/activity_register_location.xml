@@ -29,6 +29,7 @@
             <EditText
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:id="@+id/addressEditText"
                 android:layout_height="wrap_content"
                 android:hint="@string/address_edit_hint"/>
         </LinearLayout>
@@ -49,6 +50,7 @@
                 <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
+                    android:id="@+id/longitudeEditText"
                     android:layout_height="wrap_content"
                     android:hint="@string/longitude_edit_hint"/>
             </LinearLayout>
@@ -71,6 +73,7 @@
                     <EditText
                         android:layout_width="0dp"
                         android:layout_weight="1"
+                        android:id="@+id/latitudeEditText"
                         android:layout_height="wrap_content"
                         android:hint="@string/latitude_edit_hint"/>
 
@@ -81,14 +84,15 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_gravity="center_horizontal"
-            android:visibility="gone"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textViewToFetchLocation"
+                android:id="@+id/textViewLocationError"
+                android:visibility="gone"
                 android:textColor="@color/colorAccent"
+                android:onClick="errorTexViewClicked"
                 android:text="@string/the_cordinate_is_empty_click_to_fetch" />
 
         </LinearLayout>

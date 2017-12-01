@@ -17,6 +17,7 @@
             android:id="@+id/registerLocation"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/button_margin"
+            android:layout_gravity="center_horizontal"
             android:onClick="goToRegistrationScreen"
             android:text="@string/register_location"/>
 
@@ -24,6 +25,7 @@
             android:layout_width="wrap_content"
             android:id="@+id/vieLocation"
             android:layout_marginTop="@dimen/button_margin"
+            android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
             android:onClick="goToListView"
             android:text="@string/view_saved_location"/>

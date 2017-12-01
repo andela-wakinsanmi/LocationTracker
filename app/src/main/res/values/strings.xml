@@ -11,4 +11,7 @@
     <string name="register_location_button">Register Location</string>
     <string name="the_cordinate_is_empty_click_to_fetch">The cordinate is empty, click to fetch
     </string>
+    <string name="address_is_empty">Enter the Address, it is empty</string>
+    <string name="location_is_empty">location field is empty or not a number, click here to generate location
+    </string>
 </resources>
