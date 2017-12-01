@@ -11,13 +11,12 @@ import com.spykins.locationtracker.db.DbManager;
 import com.spykins.locationtracker.location.GeoFenceManager;
 import com.spykins.locationtracker.model.GeoData;
 
+import java.util.List;
+
 public class AppManager implements AppManagerCallback {
     private GeoFenceManager mGeoFenceManager;
     private DbManager mDbManager;
     private AppSharedPreference mAppSharedPreference;
-    private GeoData mGeoData;
-    private PendingIntent mPendingIntent;
-    private Context mContext;
     private MutableLiveData<Location> mLocationMutableLiveData;
 
     public AppManager(GeoFenceManager geoFenceManager, DbManager dbManager, AppSharedPreference appSharedPreference) {
@@ -29,9 +28,7 @@ public class AppManager implements AppManagerCallback {
     }
 
     public void init(GeoData geoData, PendingIntent pendingIntent, Context context) {
-        mPendingIntent = pendingIntent;
-        mContext = context;
-        mGeoData = geoData;
+        mAppSharedPreference.writeTrackingInformation(geoData);
         mGeoFenceManager.setLatitude(geoData.getLatitude());
         mGeoFenceManager.setLongitude(geoData.getLongitude());
         mGeoFenceManager.getGeoFenceRegister().setPendingIntent(pendingIntent);
@@ -48,25 +45,27 @@ public class AppManager implements AppManagerCallback {
         return mLocationMutableLiveData;
     }
 
-    public void initWithoutLongAndLat() {
-
-    }
+    //Entering geofence
     public void writeEnterGeoFenceTimeStamp() {
         mAppSharedPreference.writeEnterGeoFenceTimeStamp();
     }
 
+    //exit geofence
     public void computeExitFence() {
         mAppSharedPreference.writeTimeStampWhenExitFence();
     }
 
     @Override
-    public void setTimeDuration(long timeEntered, long timeLeft) {
-        mGeoData.setTimeSpent(timeLeft - timeEntered);
-        mDbManager.getGeoDatabase().geoDataDao().insertDataInDb(mGeoData);
+    public void setTimeDuration(GeoData geoData) {
+        mDbManager.getGeoDatabase().geoDataDao().insertDataInDb(geoData);
     }
 
     @Override
     public void setLocation(Location location) {
         mLocationMutableLiveData.setValue(location);
+    }
+
+    public List<GeoData> fetchAllGeoDataFromDb() {
+        return mDbManager.getGeoDatabase().geoDataDao().fetchAllGeodata();
     }
 }

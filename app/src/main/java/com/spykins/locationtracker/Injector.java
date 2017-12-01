@@ -74,7 +74,7 @@ public class Injector {
         return new AppSharedPreference(provideApplicationContext());
     }
 
-    private static DbManager provideDbManager() {
+    public static DbManager provideDbManager() {
         if (sDbManager == null) {
             sDbManager = new DbManager(provideGeoDatabase());
         }

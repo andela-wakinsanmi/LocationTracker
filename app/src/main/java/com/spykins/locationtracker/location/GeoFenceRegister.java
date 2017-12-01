@@ -38,7 +38,7 @@ public class GeoFenceRegister {
                 mGoogleApiClient,
                 new FenceUpdateRequest.Builder()
                         .addFence(fenceKey, fence, mPendingIntent)
-                        //.addFence(fenceKey2, fence2, mPendingIntent)
+                        .addFence(fenceKey2, fence2, mPendingIntent)
                         .build())
                 .setResultCallback(new ResultCallback<Status>() {
                     @Override

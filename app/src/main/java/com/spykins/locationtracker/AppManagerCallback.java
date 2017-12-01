@@ -10,7 +10,7 @@ import com.spykins.locationtracker.model.GeoData;
  * Data is set from the SharedPreference {@link com.spykins.locationtracker.db.AppSharedPreference#writeTimeStampWhenExitFence}
  */
 public interface AppManagerCallback {
-    void setTimeDuration(long timeEntered, long timeLeft);
+    void setTimeDuration(GeoData geoData);
 
     void setLocation(Location location);
 }
