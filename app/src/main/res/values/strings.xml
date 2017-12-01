@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">LocationTracker</string>
+    <string name="register_location">Register Location</string>
+    <string name="view_saved_location">View Saved Location</string>
 </resources>
