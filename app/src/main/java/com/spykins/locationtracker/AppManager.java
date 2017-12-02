@@ -50,6 +50,10 @@ public class AppManager implements AppManagerCallback {
         mAppSharedPreference.writeEnterGeoFenceTimeStamp();
     }
 
+    public GeoFenceManager getGeoFenceManager() {
+        return mGeoFenceManager;
+    }
+
     //exit geofence
     public void computeExitFence() {
         mAppSharedPreference.writeTimeStampWhenExitFence();
