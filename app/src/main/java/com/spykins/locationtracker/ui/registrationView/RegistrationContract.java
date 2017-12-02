@@ -14,8 +14,6 @@ public interface RegistrationContract {
 
         void setView(RegistrationContract.View view, Util util);
 
-        MutableLiveData<GeoData> getLiveData();
-
         boolean shouldProceedWithRegisteration(String addressText, String longitudeText, String latitudeText);
 
         void registerGoogleApiClient(boolean b);

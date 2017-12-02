@@ -39,11 +39,6 @@ public class RegisterLocationViewModel extends android.arch.lifecycle.ViewModel 
     }
 
     @Override
-    public MutableLiveData<GeoData> getLiveData() {
-        return null;
-    }
-
-    @Override
     public boolean shouldProceedWithRegisteration(String addressText, String longitudeText, String latitudeText) {
         boolean isValidDouble = mUtil.isValidDouble(longitudeText) && mUtil.isValidDouble(latitudeText);
 
@@ -62,6 +57,7 @@ public class RegisterLocationViewModel extends android.arch.lifecycle.ViewModel 
 
     @Override
     public void registerGoogleApiClient(final boolean shouldSetUpGeoFencing) {
+
         GoogleApiClient googleApiClient = Injector.provideGoogleApiClient(new GoogleApiClient.ConnectionCallbacks() {
             @Override
             public void onConnected(@Nullable Bundle bundle) {
