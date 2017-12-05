@@ -83,13 +83,14 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:layout_marginLeft="@dimen/form_label_left_margin"
+            android:layout_marginRight="@dimen/form_label_right_margin"
             android:layout_gravity="center_horizontal"
             android:id="@+id/textViewLocationError"
             android:visibility="gone"
             android:textColor="@color/colorAccent"
             android:onClick="errorTexViewClicked"
             android:text="@string/the_cordinate_is_empty_click_to_fetch" />
-
 
         <LinearLayout
             android:layout_width="wrap_content"
