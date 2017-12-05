@@ -41,7 +41,6 @@ public class RegisterLocationActivity extends AppCompatActivity implements
     private static final String LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,20 +55,21 @@ public class RegisterLocationActivity extends AppCompatActivity implements
         mLongitudeText = findViewById(R.id.longitudeEditText);
         mErrorTextView = findViewById(R.id.textViewLocationError);
 
-        mViewModel = (RegistrationContract.ViewModel)ViewModelProviders.of(this).get(RegisterLocationViewModel.class);
+        mViewModel = (RegistrationContract.ViewModel) ViewModelProviders.of(this).get(
+                RegisterLocationViewModel.class);
         mViewModel.setView(this, new Util());
 
     }
 
     public void registerButtonClicked(View view) {
 
-       String addressText = mAddressText.getText().toString().trim();
-       String longitudeText = mLongitudeText.getText().toString().trim();
+        String addressText = mAddressText.getText().toString().trim();
+        String longitudeText = mLongitudeText.getText().toString().trim();
         String latitudeText = mLatitudeText.getText().toString().trim();
 
-       if (mViewModel.shouldProceedWithRegisteration(addressText, longitudeText, latitudeText)) {
-           mViewModel.registerGoogleApiClient(true);
-       }
+        if (mViewModel.shouldProceedWithRegisteration(addressText, longitudeText, latitudeText)) {
+            mViewModel.registerGoogleApiClient(true);
+        }
     }
 
     @Override
@@ -102,9 +102,8 @@ public class RegisterLocationActivity extends AppCompatActivity implements
 
         if (requestCode == SETTINGS_REQUEST_CODE) {
             //check again that the device Location is on
-                mViewModel.showLocationSettingsIfLocationIsOff();
+            mViewModel.showLocationSettingsIfLocationIsOff();
         }
-
     }
 
     private void displayAlertDialog() {
@@ -113,16 +112,18 @@ public class RegisterLocationActivity extends AppCompatActivity implements
         alertDialogBuilder
                 .setMessage(R.string.alart_location_request_message)
                 .setCancelable(false)
-                .setPositiveButton(R.string.alarm_location_yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        displayPermissionDialog();
-                    }
-                })
-                .setNegativeButton(R.string.alarm_location_no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        closeApp();
-                    }
-                });
+                .setPositiveButton(R.string.alarm_location_yes,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                displayPermissionDialog();
+                            }
+                        })
+                .setNegativeButton(R.string.alarm_location_no,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                closeApp();
+                            }
+                        });
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
@@ -137,10 +138,12 @@ public class RegisterLocationActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            int[] grantResults) {
         switch (requestCode) {
             case PERMISSION_ACCESS_FINE_LOCATION:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // If permission is accepted check if location is on or off
                     mViewModel.showLocationSettingsIfLocationIsOff();
 

@@ -27,7 +27,7 @@ public class RegisterLocationViewModel extends android.arch.lifecycle.ViewModel 
         RegistrationContract.ViewModel {
 
     private final String TAG = RegisterLocationViewModel.class.getSimpleName();
-    private  WeakReference<RegistrationContract.View> mView;
+    private WeakReference<RegistrationContract.View> mView;
     private Util mUtil;
     GeoFenceReceiver mGeoFenceReceiver = new GeoFenceReceiver();
     private AppManager mAppManager;
@@ -36,7 +36,8 @@ public class RegisterLocationViewModel extends android.arch.lifecycle.ViewModel 
     private boolean mShouldSetUpGeoFencing;
 
 
-    public RegisterLocationViewModel() {}
+    public RegisterLocationViewModel() {
+    }
 
     @Override
     public void setView(RegistrationContract.View view, Util util) {
@@ -45,43 +46,39 @@ public class RegisterLocationViewModel extends android.arch.lifecycle.ViewModel 
     }
 
     @Override
-    public boolean shouldProceedWithRegisteration(String addressText, String longitudeText, String latitudeText) {
-        boolean isValidDouble = mUtil.isValidDouble(longitudeText) && mUtil.isValidDouble(latitudeText);
-        boolean flag = true;
-        try {
-            RegistrationContract.View view = mView.get();
-            if (view != null) {
-                if (addressText.isEmpty()) {
-                    flag = false;
-                    view.setErrorTextViewForAddressText();
-                    return flag;
-                }
-
-                if (!isValidDouble) {
-                    flag = false;
-                    view.setErrorTextViewForLocation();
-                    return flag;
-                }
+    public boolean shouldProceedWithRegisteration(String addressText, String longitudeText,
+            String latitudeText) {
+        boolean isValidDouble = mUtil.isValidDouble(longitudeText) && mUtil.isValidDouble(
+                latitudeText);
+        RegistrationContract.View view = mView.get();
+        if (view != null) {
+            if (addressText.isEmpty()) {
+                view.setErrorTextViewForAddressText();
+                return false;
             }
 
-        } catch (NullPointerException e) {
-            Log.d(TAG, "The View is null");
+            if (!isValidDouble) {
+                view.setErrorTextViewForLocation();
+                return false;
+            }
         }
 
-        return flag;
+        return true;
     }
 
     public void registerGoogleApiClient(final boolean shouldSetUpGeoFencing) {
         mShouldSetUpGeoFencing = shouldSetUpGeoFencing;
-        mGoogleApiClient = Injector.provideGoogleApiClient(new GoogleApiClient.ConnectionCallbacks() {
-            @Override
-            public void onConnected(@Nullable Bundle bundle) {
-                setUpGeoFencingInNeccessary();
-            }
+        mGoogleApiClient = Injector.provideGoogleApiClient(
+                new GoogleApiClient.ConnectionCallbacks() {
+                    @Override
+                    public void onConnected(@Nullable Bundle bundle) {
+                        setUpGeoFencingInNeccessary();
+                    }
 
-            @Override
-            public void onConnectionSuspended(int i) {}
-        });
+                    @Override
+                    public void onConnectionSuspended(int i) {
+                    }
+                });
 
         checkIfPermissionIsOn();
     }
@@ -99,33 +96,30 @@ public class RegisterLocationViewModel extends android.arch.lifecycle.ViewModel 
     private void setUpGeoFencing() {
         RegistrationContract.View view = mView.get();
 
-        try {
-            if (view != null) {
-                view.registerGeoFenceReceiver(mGeoFenceReceiver);
+        if (view != null) {
+            view.registerGeoFenceReceiver(mGeoFenceReceiver);
 
-                Calendar calendar = Calendar.getInstance();
-                String longitude = view.fetchLongitudeValue();
-                String latitude = view.fetchLatitudeValue();
-                String address = view.fetchAddressValue();
+            Calendar calendar = Calendar.getInstance();
+            String longitude = view.fetchLongitudeValue();
+            String latitude = view.fetchLatitudeValue();
+            String address = view.fetchAddressValue();
 
-                GeoData geoData;
-                if (mUtil.isValidDouble(latitude) && mUtil.isValidDouble(longitude) && !address.isEmpty() ) {
-                    geoData = new GeoData(calendar.getTime(), Double.valueOf(latitude),
-                            Double.valueOf(longitude), address);
-                } else {
-                    view.setErrorUnKnown();
-                    return;
-                }
-
-                PendingIntent pendingIntent = view.getPendingIntent();
-                Context context = (Context) view;
-                mAppManager.init(geoData, pendingIntent,context );
-                view.finishActivity();
+            GeoData geoData;
+            if (mUtil.isValidDouble(latitude) && mUtil.isValidDouble(longitude)
+                    && !address.isEmpty()) {
+                geoData = new GeoData(calendar.getTime(), Double.valueOf(latitude),
+                        Double.valueOf(longitude), address);
+            } else {
+                view.setErrorUnKnown();
+                return;
             }
 
-        } catch (NullPointerException e) {
-            Log.d(TAG, "The View is null");
+            PendingIntent pendingIntent = view.getPendingIntent();
+            Context context = (Context) view;
+            mAppManager.init(geoData, pendingIntent, context);
+            view.finishActivity();
         }
+
     }
 
     private void fetchCurrentLocation() {
@@ -134,29 +128,29 @@ public class RegisterLocationViewModel extends android.arch.lifecycle.ViewModel 
 
         try {
             if (view != null) {
-                Context context =  (Context)view;
+                Context context = (Context) view;
 
-                mAppManager.fetchCurrentUserLocation(context).observe((LifecycleOwner) context, new Observer<Location>() {
-                    @Override
-                    public void onChanged(@Nullable Location location) {
-                        if (location == null) {
-                            view.setErrorInLocation();
-                        } else {
-                            view.setLocationValueOnView(location);
-                        }
-                    }
-                });
+                mAppManager.fetchCurrentUserLocation(context).observe((LifecycleOwner) context,
+                        new Observer<Location>() {
+                            @Override
+                            public void onChanged(@Nullable Location location) {
+                                if (location == null) {
+                                    view.setErrorInLocation();
+                                } else {
+                                    view.setLocationValueOnView(location);
+                                }
+                            }
+                        });
             }
 
         } catch (NullPointerException e) {
             Log.d(TAG, "The View is null");
-
         }
     }
 
     public void showLocationSettingsIfLocationIsOff() {
         RegistrationContract.View view = mView.get();
-        if (view != null &&  !hasEnabledDeviceGps()) {
+        if (view != null && !hasEnabledDeviceGps()) {
             view.startSettingsActivity();
             isLocationSettingsOn = false;
         } else {
@@ -167,7 +161,7 @@ public class RegisterLocationViewModel extends android.arch.lifecycle.ViewModel 
 
     private void checkIfConditionToConnectIsSatisfied() {
         if (isLocationSettingsOn && isLocationPermissionOn()) {
-            Log.d(TAG,"LocationSetting is on and permission is on");
+            Log.d(TAG, "LocationSetting is on and permission is on");
             setUpApp();
             //Allow Application
         }
@@ -207,7 +201,8 @@ public class RegisterLocationViewModel extends android.arch.lifecycle.ViewModel 
     public boolean hasEnabledDeviceGps() {
         RegistrationContract.View view = mView.get();
         if (view != null) {
-            LocationManager locationManager = (LocationManager) ((Activity) view).getSystemService(LOCATION_SERVICE);
+            LocationManager locationManager = (LocationManager) ((Activity) view).getSystemService(
+                    LOCATION_SERVICE);
             return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         }
         return false;
